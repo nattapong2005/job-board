@@ -2,17 +2,16 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 
-// GET all users
+// GET all jobtype
 exports.get = async (req, res) => {
     try {
         
-        const usertype = await prisma.usertype.findMany({
+        const jobtype = await prisma.jobtype.findMany({
         });
-        res.json(usertype);
-
-      
+        res.json(jobtype);
+        
     } catch (error) {
-        return res.status(400).json({error: "เกิดข้อผิดพลาด"});
+        return res.status(404).json({error: "เกิดข้อผิดพลาด"});
     }
 };
 
@@ -25,34 +24,37 @@ exports.getById = async (req, res) => {
         return res.status(404).json({error: "ไอดีไม่ถูกต้อง"});
     }
 
-    const usertype = await prisma.usertype.findUnique({
+    const jobtype = await prisma.jobtype.findUnique({
         where: {
           id: parseInt(id),
         },
       });
 
-      if(!usertype) {
-        return res.status(404).json({error: "ไม่พบไอดี " + id});
+      if(!jobtype) {
+        return res.status(404).send("ไม่พบไอดี " + id);
       }
       
-      res.json(usertype);
+      res.json(jobtype);
     
   } catch (error) {
-    return res.status(400).json({error: "เกิดข้อผิดพลาด"});
+    return res.status(404).json({error: "เกิดข้อผิดพลาด"});
   }
 
 };
 
+
+
 // POST 
 exports.create = async (req, res) => {
-  const { name } = req.body;
-  const usertype = await prisma.usertype.create({
+  const { name,type } = req.body;
+  const jobtype = await prisma.jobtype.create({
     data: {
       name,
+      type,
     },
   });
-  res.json({success: "สร้างประเภทผู้ใช้งานสำเร็จ"});
-  res.json(usertype);
+  res.json({success: "สร้างประเภทงานสำเร็จ"});
+  res.json(jobtype);
 };
 
 
@@ -69,7 +71,7 @@ exports.update = async (req, res) => {
         }
 
         const { name } = req.body;
-        const usertype = await prisma.usertype.update({
+        const jobtype = await prisma.jobtype.update({
           where: {
             id: parseInt(id),
           },
@@ -78,14 +80,14 @@ exports.update = async (req, res) => {
           },
         });
 
-        if(!usertype) {
+        if(!jobtype) {
             return res.status(404).json({error: "เกิดข้อผิดพลาดไอดี " + id});
         }
 
-        res.json(usertype);
+        res.json(jobtype);
         
     } catch (error) {
-        return res.status(400).json({error: "เกิดข้อผิดพลาด"});
+      return res.status(404).json({error: "เกิดข้อผิดพลาด"});return res.status(404).json({error: "เกิดข้อผิดพลาด"});
     }
 
 };
@@ -101,20 +103,20 @@ exports.delete = async (req, res) => {
             res.status(404).json({error: "ไอดีไม่ถูกต้อง"});
         }
 
-        const usertype = await prisma.usertype.delete({
+        const jobtype = await prisma.jobtype.delete({
           where: {
             id: parseInt(id),
           },
         });
 
-        if(!usertype) {
+        if(!jobtype) {
             return res.status(404).json({error: "เกิดข้อผิดพลาดไอดี " + id});
         }
 
         res.json({success: "ลบไอดี " + id});
         
     } catch (error) {
-        return res.status(400).json({error: "เกิดข้อผิดพลาด"});
+        return res.status(404).json({error: "เกิดข้อผิดพลาด"});
     }
 
 };
