@@ -1,120 +1,118 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-
 // GET all users
 exports.get = async (req, res) => {
-    try {
-        
-        const usertype = await prisma.usertype.findMany({
-        });
-        res.json(usertype);
+  try {
+    const getAllUserType = await prisma.usertype.findMany({});
 
-      
-    } catch (error) {
-        return res.status(400).json({error: "เกิดข้อผิดพลาด"});
-    }
+    return res.status(200).json(getAllUserType);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "เกิดข้อผิดพลาด" });
+  }
 };
 
 //  GET by Id
 exports.getById = async (req, res) => {
   try {
     const { id } = req.params;
-
-    if(isNaN(id)) {
-        return res.status(404).json({error: "ไอดีไม่ถูกต้อง"});
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "ไอดีไม่ถูกต้อง" });
     }
 
-    const usertype = await prisma.usertype.findUnique({
-        where: {
-          id: parseInt(id),
-        },
-      });
+    const getUserTypeById = await prisma.usertype.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
 
-      if(!usertype) {
-        return res.status(404).json({error: "ไม่พบไอดี " + id});
-      }
-      
-      res.json(usertype);
-    
+    if (!getUserTypeById) {
+      return res.status(400).json({ error: "ไม่พบประเภทผู้ใช้ไอดี " + id });
+    }
+
+    return res.status(200).json(getUserTypeById);
   } catch (error) {
-    return res.status(400).json({error: "เกิดข้อผิดพลาด"});
+    console.log(error);
+    return res.status(500).json({ error: "เกิดข้อผิดพลาด" });
   }
-
 };
 
-// POST 
+// POST
 exports.create = async (req, res) => {
-  const { name } = req.body;
-  const usertype = await prisma.usertype.create({
-    data: {
-      name,
-    },
-  });
-  res.json({success: "สร้างประเภทผู้ใช้งานสำเร็จ"});
-  res.json(usertype);
-};
+  try {
+    const { name } = req.body;
+    const createUserType = await prisma.usertype.create({
+      data: {
+        name,
+      },
+    });
 
-
-
-// PUT 
-exports.update = async (req, res) => {
-
-    try {
-
-        const { id } = req.params;
-
-        if(isNaN(id)) {
-            return res.status(404).json({error: "ไอดีไม่ถูกต้อง"});
-        }
-
-        const { name } = req.body;
-        const usertype = await prisma.usertype.update({
-          where: {
-            id: parseInt(id),
-          },
-          data: {
-            name,
-          },
-        });
-
-        if(!usertype) {
-            return res.status(404).json({error: "เกิดข้อผิดพลาดไอดี " + id});
-        }
-
-        res.json(usertype);
-        
-    } catch (error) {
-        return res.status(400).json({error: "เกิดข้อผิดพลาด"});
+    if (!createUserType) {
+      return res.status(400).json({ error: "สร้างประเภทผู้ใช้งานไม่สำเร็จ" });
     }
 
+    return res.status(200).json({ success: "สร้างประเภทผู้ใช้งานสำเร็จ" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "เกิดข้อผิดพลาด" });
+  }
 };
 
+// PUT
+exports.update = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "ไอดีไม่ถูกต้อง" });
+    }
+
+    const { name } = req.body;
+    const updateUserType = await prisma.usertype.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        name,
+      },
+    });
+
+    if (!updateUserType) {
+      return res
+        .status(400)
+        .json({ error: "ไม่สามารถอัพเดทประเภทผู้ใช้งานไอดี " + id });
+    }
+
+    return res.status(200).json({ success: "อัพเดทประเภทผู้ใช้งานไอดี " + id });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "เกิดข้อผิดพลาด" });
+  }
+};
 
 // DELETE by Id
 exports.delete = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-    try {
-        const { id } = req.params;
-
-        if(isNaN(id)) {
-            res.status(404).json({error: "ไอดีไม่ถูกต้อง"});
-        }
-
-        const usertype = await prisma.usertype.delete({
-          where: {
-            id: parseInt(id),
-          },
-        });
-
-        if(!usertype) {
-            return res.status(404).json({error: "เกิดข้อผิดพลาดไอดี " + id});
-        }
-
-        res.status(200).json({success: "ลบไอดี " + id});
-        
-    } catch (error) {
-        return res.status(400).json({error: "เกิดข้อผิดพลาด"});
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "ไอดีไม่ถูกต้อง" });
     }
 
+    const deleteUserType = await prisma.usertype.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!deleteUserType) {
+      return res.status(400).json({ error: "เกิดข้อผิดพลาดไอดี " + id });
+    }
+
+    return res.status(200).json({ success: "ลบประเภทผู้ใช้งานไอดี " + id });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "เกิดข้อผิดพลาด" });
+  }
 };
