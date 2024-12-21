@@ -7,6 +7,7 @@ const cors = require('cors');
 const userRoute = require('./routes/users.route');
 const usertypeRoute = require('./routes/usertype.route');
 const jobtypeRoute = require('./routes/jobtype.route');
+const jobpostRoute = require('./routes/jobpost.route');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 app.use("/users", userRoute);
 app.use("/usertype", usertypeRoute);
 app.use("/jobtype", jobtypeRoute);
+app.use("/jobpost", jobpostRoute);
 
 
 

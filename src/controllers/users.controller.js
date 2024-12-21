@@ -126,7 +126,8 @@ exports.delete = async (req, res) => {
       return res.status(404).json({error: "ไม่สามารถลบไอดี " + id});
     }
 
-    res.json(user);
+    res.status(200).json({success: "ลบไอดี " + id});
+
   } catch (error) {
     return res.status(404).json({error: "เกิดข้อผิดพลาด"});
   }

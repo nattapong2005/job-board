@@ -111,7 +111,7 @@ exports.delete = async (req, res) => {
             return res.status(404).json({error: "เกิดข้อผิดพลาดไอดี " + id});
         }
 
-        res.json({success: "ลบไอดี " + id});
+        res.status(200).json({success: "ลบไอดี " + id});
         
     } catch (error) {
         return res.status(400).json({error: "เกิดข้อผิดพลาด"});
